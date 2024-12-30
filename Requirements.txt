@@ -1,0 +1,16 @@
+# Python code to create requirements.txt file
+
+# List of required packages for the app
+requirements = [
+    "streamlit",
+    "scikit-learn",
+    "nltk",
+    "pandas"
+]
+
+# Create or overwrite the requirements.txt file
+with open("requirements.txt", "w") as file:
+    for package in requirements:
+        file.write(f"{package}\n")
+
+print("requirements.txt file has been generated!")
