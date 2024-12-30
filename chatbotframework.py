@@ -10,8 +10,8 @@ from sklearn.linear_model import LogisticRegression
 
 # Download necessary NLTK data
 ssl._create_default_https_context = ssl._create_unverified_context
-nltk.data.path.append(os.path.abspath("nltk_data"))
-nltk.download('punkt')
+#nltk.data.path.append(os.path.abspath("nltk_data"))
+#nltk.download('punkt')
 
 # Load intents from JSON (corrected the file extension to json)
 file_path = os.path.abspath("./intents.json")
