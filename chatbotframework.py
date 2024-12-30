@@ -5,6 +5,7 @@ import csv
 import ssl
 import streamlit as st
 import random
+import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 
@@ -13,10 +14,10 @@ ssl._create_default_https_context = ssl._create_unverified_context
 nltk.data.path.append(os.path.abspath("nltk_data"))
 nltk.download('punkt')
 
-# Load intents from JSON
-file_path = os.path.abspath("./intents.txt")
+# Load intents from JSON (corrected the file extension to json)
+file_path = os.path.abspath("./intents.json")
 with open(file_path, "r") as file:
-    intents = txt.load(file)
+    intents = json.load(file)  # Corrected from txt.load to json.load
 
 # Initialize vectorizer and classifier
 vectorizer = TfidfVectorizer()
@@ -42,12 +43,18 @@ def chatbot(input_text):
         if intent['tag'] == tag:
             response = random.choice(intent['responses'])
             return response
+    return "Sorry, I didn't understand that."  # Default response if no match
 
 counter = 0
 
 def main():
     global counter
-    st.title("chatbot")
+    st.title("Chatbot")
+
+    # Use session state for counter so it's persistent
+    if "counter" not in st.session_state:
+        st.session_state.counter = 0
+    st.session_state.counter += 1
 
     menu = ["Home", "Conversation History", "About"]
     choice = st.sidebar.selectbox("Menu", menu)
@@ -61,13 +68,12 @@ def main():
                 csv_writer = csv.writer(csvfile)
                 csv_writer.writerow(['User Input', 'Chatbot Response', 'Timestamp'])
 
-        counter += 1
-        user_input = st.text_input("You", key=f"user_input_{counter}")
+        user_input = st.text_input("You", key=f"user_input_{st.session_state.counter}")
 
         if user_input:
             user_input_str = str(user_input)
             response = chatbot(user_input)
-            st.text_area("Chatbox:", value=response, height=120, max_chars=None, key=f"chatbot_{counter}")
+            st.text_area("Chatbox:", value=response, height=120, max_chars=None, key=f"chatbot_{st.session_state.counter}")
 
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -112,3 +118,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
