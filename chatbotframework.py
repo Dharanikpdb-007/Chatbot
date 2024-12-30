@@ -5,8 +5,7 @@ import csv
 import ssl
 import streamlit as st
 import random
-import nltk
-from sklearn.feature_extraction.text import TfidfVectorizer
+import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 
 # Download necessary NLTK data
